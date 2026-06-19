@@ -659,7 +659,11 @@
       <h2>Get Early Access</h2>
       <p>Join the waitlist and be the first to automate your business with NovaMind AI. Early members get priority onboarding and founder pricing.</p>
 
-      <form class="waitlist-form" id="waitlistForm">
+      <form class="waitlist-form" id="waitlistForm" action="https://formsubmit.co/landondorion@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="New NovaMind AI Waitlist Signup!">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <input type="text" name="_honey" style="display:none">
         <input type="text" name="name" placeholder="Your name" required>
         <input type="email" name="email" placeholder="you@company.com" required>
         <input type="text" name="company" placeholder="Company name (optional)">
@@ -692,25 +696,30 @@
     }, { threshold: 0.1 });
     reveals.forEach(el => observer.observe(el));
 
-    // Waitlist form
+    // Waitlist form — submit via AJAX so user stays on the page
     document.getElementById('waitlistForm').addEventListener('submit', function(e) {
       e.preventDefault();
-
       const form = this;
-      const data = new FormData(form);
-      const entry = {
-        name: data.get('name'),
-        email: data.get('email'),
-        company: data.get('company'),
-        timestamp: new Date().toISOString()
-      };
+      const btn = form.querySelector('button');
+      btn.textContent = 'Submitting...';
+      btn.disabled = true;
 
-      let waitlist = JSON.parse(localStorage.getItem('novamind_waitlist') || '[]');
-      waitlist.push(entry);
-      localStorage.setItem('novamind_waitlist', JSON.stringify(waitlist));
-
-      form.style.display = 'none';
-      document.getElementById('successMsg').style.display = 'block';
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      }).then(function(res) {
+        if (res.ok) {
+          form.style.display = 'none';
+          document.getElementById('successMsg').style.display = 'block';
+        } else {
+          btn.textContent = 'Try Again';
+          btn.disabled = false;
+        }
+      }).catch(function() {
+        btn.textContent = 'Try Again';
+        btn.disabled = false;
+      });
     });
   </script>
 
