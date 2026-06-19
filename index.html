@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NovaMind AI — Automate Everything</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #06060a;
+      --surface: #0e0e14;
+      --border: #1a1a2e;
+      --text: #e4e4ed;
+      --text-muted: #8888a0;
+      --accent: #7c3aed;
+      --accent-light: #a78bfa;
+      --accent-glow: rgba(124, 58, 237, 0.35);
+      --gradient-1: #7c3aed;
+      --gradient-2: #2563eb;
+      --gradient-3: #06b6d4;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Ambient background */
+    .bg-glow {
+      position: fixed;
+      top: -40%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 900px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      animation: pulse-glow 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.4; transform: translateX(-50%) scale(1); }
+      50% { opacity: 0.7; transform: translateX(-50%) scale(1.1); }
+    }
+
+    /* Nav */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 1rem 2rem;
+      backdrop-filter: blur(20px);
+      background: rgba(6, 6, 10, 0.7);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--gradient-1), var(--gradient-3));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.75rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+      color: #fff;
+      box-shadow: 0 0 30px var(--accent-glow);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 50px var(--accent-glow);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover {
+      border-color: var(--accent);
+      background: rgba(124, 58, 237, 0.08);
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 0.8rem;
+      color: var(--accent-light);
+      font-weight: 500;
+      margin-bottom: 2rem;
+      animation: fade-up 0.8s ease;
+    }
+
+    .badge .dot {
+      width: 6px; height: 6px;
+      background: #22c55e;
+      border-radius: 50%;
+      animation: blink 2s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      max-width: 800px;
+      margin-bottom: 1.5rem;
+      animation: fade-up 0.8s ease 0.1s both;
+    }
+
+    h1 .gradient {
+      background: linear-gradient(135deg, var(--gradient-1), var(--gradient-3));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      max-width: 560px;
+      margin-bottom: 2.5rem;
+      animation: fade-up 0.8s ease 0.2s both;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fade-up 0.8s ease 0.3s both;
+    }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 4rem;
+      animation: fade-up 0.8s ease 0.4s both;
+    }
+
+    .stat { text-align: center; }
+    .stat-num {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--gradient-1), var(--gradient-3));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+    /* Sections */
+    section {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 6rem 2rem;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent-light);
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 1rem;
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 550px;
+      margin-bottom: 3rem;
+    }
+
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: all 0.3s;
+    }
+    .feature-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .feature-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(37,99,235,0.2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* How it Works */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      counter-reset: step;
+    }
+
+    .step {
+      position: relative;
+      padding: 2rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      counter-increment: step;
+    }
+
+    .step::before {
+      content: counter(step);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .step h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .step p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* Use Cases */
+    .use-cases {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .use-case {
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      transition: border-color 0.3s;
+    }
+    .use-case:hover { border-color: var(--accent); }
+
+    .use-case h4 {
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .use-case p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* Waitlist */
+    .waitlist-section {
+      text-align: center;
+      padding: 6rem 2rem;
+    }
+
+    .waitlist-box {
+      max-width: 560px;
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3rem 2.5rem;
+    }
+
+    .waitlist-box h2 {
+      margin-bottom: 0.75rem;
+    }
+
+    .waitlist-box p {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .waitlist-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .waitlist-form input {
+      padding: 0.85rem 1.25rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .waitlist-form input:focus { border-color: var(--accent); }
+
+    .waitlist-form .btn { width: 100%; justify-content: center; }
+
+    .waitlist-note {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 1rem;
+    }
+
+    .success-msg {
+      display: none;
+      padding: 1.5rem;
+      border-radius: 12px;
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #22c55e;
+      font-weight: 600;
+    }
+
+    /* Testimonial / Social Proof */
+    .social-proof {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    .avatars {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 2px solid var(--bg);
+      margin-left: -10px;
+      background: linear-gradient(135deg, var(--gradient-1), var(--gradient-3));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .avatar:first-child { margin-left: 0; }
+
+    .social-proof p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    .social-proof strong { color: var(--text); }
+
+    /* Footer */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    footer .logo {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero-stats { gap: 1.5rem; }
+      .features-grid, .steps, .use-cases { grid-template-columns: 1fr; }
+      .waitlist-box { padding: 2rem 1.5rem; }
+    }
+
+    /* Scroll animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-glow"></div>
+
+  <!-- Nav -->
+  <nav>
+    <div class="nav-inner">
+      <div class="logo">NovaMind AI</div>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#use-cases">Use Cases</a>
+        <a href="#waitlist" class="btn btn-primary" style="padding: 0.5rem 1.25rem; font-size: 0.85rem;">Join Waitlist</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="badge">
+      <span class="dot"></span>
+      Now accepting early access signups
+    </div>
+    <h1>Automate Your Business With <span class="gradient">AI That Works</span></h1>
+    <p>NovaMind AI builds custom automation agents that handle your repetitive tasks, streamline workflows, and scale operations — so you can focus on what matters.</p>
+    <div class="hero-actions">
+      <a href="#waitlist" class="btn btn-primary">Join the Waitlist</a>
+      <a href="#features" class="btn btn-outline">See What We Do</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">10x</div>
+        <div class="stat-label">Faster Workflows</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">85%</div>
+        <div class="stat-label">Cost Reduction</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">24/7</div>
+        <div class="stat-label">Always Running</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="reveal">
+    <div class="section-label">What We Build</div>
+    <h2>AI Agents That Actually Deliver</h2>
+    <p class="section-desc">We don't sell generic chatbots. We build tailored AI automation systems that plug into your existing tools and processes.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">&#9889;</div>
+        <h3>Workflow Automation</h3>
+        <p>Connect your apps and automate multi-step processes. From lead capture to invoicing, your AI agent handles it end to end.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#128233;</div>
+        <h3>Intelligent Email &amp; Outreach</h3>
+        <p>AI-powered email sequences that personalize, follow up, and close — without you lifting a finger.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#128202;</div>
+        <h3>Data Processing &amp; Reports</h3>
+        <p>Automatically pull, clean, and analyze data from any source. Get insights delivered to your inbox on schedule.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#129302;</div>
+        <h3>Custom AI Chatbots</h3>
+        <p>Deploy intelligent chatbots trained on your data for customer support, lead qualification, and internal Q&A.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#128274;</div>
+        <h3>CRM &amp; Pipeline Automation</h3>
+        <p>Keep your pipeline moving with automated lead scoring, follow-ups, and deal tracking across your CRM.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#128640;</div>
+        <h3>Social Media Automation</h3>
+        <p>Schedule, generate, and post content across platforms with AI that understands your brand voice.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section id="how-it-works" class="reveal">
+    <div class="section-label">Simple Process</div>
+    <h2>Up and Running in Days, Not Months</h2>
+    <p class="section-desc">We handle the complexity. You get the results.</p>
+
+    <div class="steps">
+      <div class="step">
+        <h3>Tell Us Your Pain Points</h3>
+        <p>Book a free call and walk us through the tasks eating up your team's time. We identify the biggest automation wins.</p>
+      </div>
+      <div class="step">
+        <h3>We Build Your AI Agent</h3>
+        <p>Our team designs and deploys a custom AI automation tailored to your tools, data, and workflows.</p>
+      </div>
+      <div class="step">
+        <h3>Launch &amp; Optimize</h3>
+        <p>Your agent goes live. We monitor performance, fine-tune accuracy, and scale as your needs grow.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use Cases -->
+  <section id="use-cases" class="reveal">
+    <div class="section-label">Who It's For</div>
+    <h2>Built for Teams That Move Fast</h2>
+    <p class="section-desc">Whether you're a solo founder or a growing team, AI automation eliminates your bottlenecks.</p>
+
+    <div class="use-cases">
+      <div class="use-case">
+        <h4>E-Commerce</h4>
+        <p>Automate order processing, customer support, inventory alerts, and review management.</p>
+      </div>
+      <div class="use-case">
+        <h4>Agencies</h4>
+        <p>Scale client delivery with automated reporting, content generation, and project tracking.</p>
+      </div>
+      <div class="use-case">
+        <h4>SaaS Companies</h4>
+        <p>Automate onboarding flows, churn prediction, support tickets, and usage analytics.</p>
+      </div>
+      <div class="use-case">
+        <h4>Real Estate</h4>
+        <p>AI-powered lead follow-up, listing management, and automated property matching.</p>
+      </div>
+      <div class="use-case">
+        <h4>Healthcare</h4>
+        <p>Streamline appointment scheduling, patient intake forms, and insurance verification.</p>
+      </div>
+      <div class="use-case">
+        <h4>Consultants &amp; Coaches</h4>
+        <p>Automate scheduling, client onboarding, session notes, and invoicing workflows.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof -->
+  <section class="social-proof reveal">
+    <div class="avatars">
+      <div class="avatar">L</div>
+      <div class="avatar">M</div>
+      <div class="avatar">K</div>
+      <div class="avatar">J</div>
+      <div class="avatar">R</div>
+    </div>
+    <p><strong>500+ people</strong> have already joined the waitlist.</p>
+    <p>Be among the first to get access when we launch.</p>
+  </section>
+
+  <!-- Waitlist -->
+  <section id="waitlist" class="waitlist-section reveal">
+    <div class="waitlist-box">
+      <h2>Get Early Access</h2>
+      <p>Join the waitlist and be the first to automate your business with NovaMind AI. Early members get priority onboarding and founder pricing.</p>
+
+      <form class="waitlist-form" id="waitlistForm">
+        <input type="text" name="name" placeholder="Your name" required>
+        <input type="email" name="email" placeholder="you@company.com" required>
+        <input type="text" name="company" placeholder="Company name (optional)">
+        <button type="submit" class="btn btn-primary">Join the Waitlist</button>
+      </form>
+
+      <div class="success-msg" id="successMsg">
+        You're on the list! We'll be in touch soon.
+      </div>
+
+      <p class="waitlist-note">No spam, ever. We'll only email you about your early access.</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <span class="logo">NovaMind AI</span>
+    <p>&copy; 2026 NovaMind AI. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Waitlist form
+    document.getElementById('waitlistForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const form = this;
+      const data = new FormData(form);
+      const entry = {
+        name: data.get('name'),
+        email: data.get('email'),
+        company: data.get('company'),
+        timestamp: new Date().toISOString()
+      };
+
+      let waitlist = JSON.parse(localStorage.getItem('novamind_waitlist') || '[]');
+      waitlist.push(entry);
+      localStorage.setItem('novamind_waitlist', JSON.stringify(waitlist));
+
+      form.style.display = 'none';
+      document.getElementById('successMsg').style.display = 'block';
+    });
+  </script>
+
+</body>
+</html>
