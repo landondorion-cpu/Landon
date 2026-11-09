@@ -4,6 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NovaMind AI — Automate Everything</title>
+  <meta name="description" content="NovaMind AI builds custom AI automation agents that handle repetitive tasks, streamline workflows and scale operations. Join the waitlist for early access.">
+  <meta name="theme-color" content="#06060a">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="NovaMind AI — Automate Your Business With AI That Works">
+  <meta property="og:description" content="Custom AI automation agents for your workflows. Join the waitlist for early access and founder pricing.">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237c3aed'/%3E%3Cstop offset='1' stop-color='%2306b6d4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Ctext x='16' y='22' font-family='Arial' font-weight='900' font-size='16' text-anchor='middle' fill='white'%3EN%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -260,7 +267,7 @@
     /* Features Grid */
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
       gap: 1.5rem;
     }
 
@@ -429,6 +436,22 @@
       font-weight: 600;
     }
 
+    .error-msg {
+      display: none;
+      margin-top: 0.75rem;
+      font-size: 0.85rem;
+      color: #f87171;
+    }
+
+    .btn[disabled] { opacity: 0.6; cursor: wait; transform: none; }
+
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
+
+    .hp-field { position: absolute; left: -9999px; }
+
     /* Testimonial / Social Proof */
     .social-proof {
       text-align: center;
@@ -481,7 +504,11 @@
 
     /* Responsive */
     @media (max-width: 768px) {
-      .nav-links { display: none; }
+      nav { padding: 0.75rem 1rem; }
+      .nav-links a:not(.btn) { display: none; }
+      .hero { padding: 7rem 1rem 3rem; }
+      section { padding: 4rem 1rem; }
+      .hero-stats { flex-wrap: wrap; justify-content: center; }
       .hero-stats { gap: 1.5rem; }
       .features-grid, .steps, .use-cases { grid-template-columns: 1fr; }
       .waitlist-box { padding: 2rem 1.5rem; }
@@ -496,6 +523,12 @@
     .reveal.visible {
       opacity: 1;
       transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; }
     }
   </style>
 </head>
@@ -649,7 +682,7 @@
       <div class="avatar">J</div>
       <div class="avatar">R</div>
     </div>
-    <p><strong>500+ people</strong> have already joined the waitlist.</p>
+    <p><strong>Founders and teams</strong> are already lining up for early access.</p>
     <p>Be among the first to get access when we launch.</p>
   </section>
 
@@ -659,14 +692,21 @@
       <h2>Get Early Access</h2>
       <p>Join the waitlist and be the first to automate your business with NovaMind AI. Early members get priority onboarding and founder pricing.</p>
 
-      <form class="waitlist-form" id="waitlistForm">
-        <input type="text" name="name" placeholder="Your name" required>
-        <input type="email" name="email" placeholder="you@company.com" required>
-        <input type="text" name="company" placeholder="Company name (optional)">
-        <button type="submit" class="btn btn-primary">Join the Waitlist</button>
+      <form class="waitlist-form" id="waitlistForm" novalidate>
+        <label class="sr-only" for="wl-name">Your name</label>
+        <input id="wl-name" type="text" name="name" placeholder="Your name" autocomplete="name" required>
+        <label class="sr-only" for="wl-email">Email</label>
+        <input id="wl-email" type="email" name="email" placeholder="you@company.com" autocomplete="email" required>
+        <label class="sr-only" for="wl-company">Company name (optional)</label>
+        <input id="wl-company" type="text" name="company" placeholder="Company name (optional)" autocomplete="organization">
+        <!-- Honeypot: bots fill this, people never see it -->
+        <input class="hp-field" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit" class="btn btn-primary" id="waitlistBtn">Join the Waitlist</button>
       </form>
 
-      <div class="success-msg" id="successMsg">
+      <div class="error-msg" id="errorMsg" role="alert"></div>
+
+      <div class="success-msg" id="successMsg" role="status" tabindex="-1">
         You're on the list! We'll be in touch soon.
       </div>
 
@@ -693,24 +733,60 @@
     reveals.forEach(el => observer.observe(el));
 
     // Waitlist form
-    document.getElementById('waitlistForm').addEventListener('submit', function(e) {
+    // Paste your form endpoint here (see README). Works with Formspree, Getform,
+    // Basin or any service that accepts a JSON POST.
+    const WAITLIST_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+
+    const form = document.getElementById('waitlistForm');
+    const btn = document.getElementById('waitlistBtn');
+    const errorMsg = document.getElementById('errorMsg');
+    const successMsg = document.getElementById('successMsg');
+
+    function showError(msg) {
+      errorMsg.textContent = msg;
+      errorMsg.style.display = 'block';
+    }
+
+    form.addEventListener('submit', async function (e) {
       e.preventDefault();
+      errorMsg.style.display = 'none';
 
-      const form = this;
       const data = new FormData(form);
-      const entry = {
-        name: data.get('name'),
-        email: data.get('email'),
-        company: data.get('company'),
-        timestamp: new Date().toISOString()
-      };
+      const name = (data.get('name') || '').trim();
+      const email = (data.get('email') || '').trim();
+      if (!name) return showError('Please enter your name.');
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showError('Please enter a valid email address.');
+      if (data.get('_gotcha')) return; // bot
 
-      let waitlist = JSON.parse(localStorage.getItem('novamind_waitlist') || '[]');
-      waitlist.push(entry);
-      localStorage.setItem('novamind_waitlist', JSON.stringify(waitlist));
+      if (WAITLIST_ENDPOINT.includes('YOUR_FORM_ID')) {
+        console.error('Waitlist endpoint not configured: set WAITLIST_ENDPOINT in index.html.');
+        return showError('Signups are not open just yet. Please try again soon.');
+      }
 
-      form.style.display = 'none';
-      document.getElementById('successMsg').style.display = 'block';
+      btn.disabled = true;
+      btn.textContent = 'Joining…';
+      try {
+        const res = await fetch(WAITLIST_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            company: (data.get('company') || '').trim(),
+            source: location.href,
+            submitted_at: new Date().toISOString()
+          })
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        form.style.display = 'none';
+        successMsg.style.display = 'block';
+        successMsg.focus();
+      } catch (err) {
+        console.error(err);
+        showError('Something went wrong. Please try again in a moment.');
+        btn.disabled = false;
+        btn.textContent = 'Join the Waitlist';
+      }
     });
   </script>
 
