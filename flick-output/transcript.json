@@ -1,0 +1,13 @@
+{
+  "source": "written-script-from-landing-page",
+  "text": "Your team is drowning in busywork. Meet NovaMind AI. Custom AI agents that run your workflows end to end. 10x faster workflows. 85% lower costs. Running 24/7. Live in days, not months. Join the waitlist — 500+ already have.",
+  "segments": [
+    {"start": 0.0, "end": 4.5, "text": "Your team is drowning in busywork."},
+    {"start": 4.5, "end": 8.0, "text": "Meet NovaMind AI."},
+    {"start": 8.0, "end": 14.0, "text": "Custom AI agents that run your workflows end to end."},
+    {"start": 14.0, "end": 19.0, "text": "10x faster workflows. 85% lower costs. Running 24/7."},
+    {"start": 19.0, "end": 24.0, "text": "Live in days, not months."},
+    {"start": 24.0, "end": 30.0, "text": "Join the waitlist — 500+ already have."}
+  ],
+  "words": []
+}

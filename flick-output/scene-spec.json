@@ -1,0 +1,101 @@
+{
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "scenes": [
+    {
+      "id": "busywork-overload",
+      "name": "Busywork overload",
+      "transcript": "Your team is drowning in busywork.",
+      "startMs": 0,
+      "endMs": 4500,
+      "from": 0,
+      "durationInFrames": 135,
+      "componentName": "BusyworkOverload",
+      "assets": [],
+      "visualDescription": "Task cards drop into a messy stack while an hours-lost counter climbs to 23h; headline slams in.",
+      "soundEffects": [
+        "Popups.mp3 @ frame 4 (cards drop)",
+        "Impact.mp3 @ frame 82 (headline lands)"
+      ]
+    },
+    {
+      "id": "meet-novamind",
+      "name": "Meet NovaMind",
+      "transcript": "Meet NovaMind AI.",
+      "startMs": 4500,
+      "endMs": 8000,
+      "from": 135,
+      "durationInFrames": 105,
+      "componentName": "MeetNovamind",
+      "assets": [],
+      "visualDescription": "Task cards spiral into a glowing orb that bursts into the gradient NovaMind AI wordmark plus early-access badge.",
+      "soundEffects": [
+        "riser.mp3 @ frame 0 (absorption)",
+        "aha-moment.MP3 @ frame 36 (reveal)"
+      ]
+    },
+    {
+      "id": "agent-runs-workflow",
+      "name": "Agent runs workflow",
+      "transcript": "Custom AI agents that run your workflows end to end.",
+      "startMs": 8000,
+      "endMs": 14000,
+      "from": 240,
+      "durationInFrames": 180,
+      "componentName": "AgentRunsWorkflow",
+      "assets": [],
+      "visualDescription": "Four workflow nodes; an AI-agent pulse travels down the connector and checks each node off.",
+      "soundEffects": [
+        "Correct.mp3 @ frames 62, 92, 122, 152 (each check)"
+      ]
+    },
+    {
+      "id": "results-count-up",
+      "name": "Results count-up",
+      "transcript": "10x faster workflows. 85% lower costs. Running 24/7.",
+      "startMs": 14000,
+      "endMs": 19000,
+      "from": 420,
+      "durationInFrames": 150,
+      "componentName": "ResultsCountUp",
+      "assets": [],
+      "visualDescription": "Three stat cards slide in; numbers and bars count up.",
+      "soundEffects": [
+        "Pop.mp3 @ frames 10, 42, 74 (card enters)"
+      ]
+    },
+    {
+      "id": "live-in-days",
+      "name": "Live in days",
+      "transcript": "Live in days, not months.",
+      "startMs": 19000,
+      "endMs": 24000,
+      "from": 570,
+      "durationInFrames": 150,
+      "componentName": "LiveInDays",
+      "assets": [],
+      "visualDescription": "'not months' struck through; progress bar fills as three onboarding steps check off.",
+      "soundEffects": [
+        "Click.mp3 @ frames 52, 78, 104 (step lights)"
+      ]
+    },
+    {
+      "id": "join-the-waitlist",
+      "name": "Join the waitlist",
+      "transcript": "Join the waitlist \u2014 500+ already have.",
+      "startMs": 24000,
+      "endMs": 30000,
+      "from": 720,
+      "durationInFrames": 180,
+      "componentName": "JoinTheWaitlist",
+      "assets": [],
+      "visualDescription": "Email typed into waitlist card, cursor clicks Join, success message, avatars + 500+ joined.",
+      "soundEffects": [
+        "Typing.mp3 @ frames 22-62",
+        "Click.mp3 @ frame 76",
+        "Notification.mp3 @ frame 84"
+      ]
+    }
+  ]
+}
